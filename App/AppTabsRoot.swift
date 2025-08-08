@@ -32,6 +32,7 @@ struct AppTabRootView: View {
 }
 
 extension AppTab {
+  @MainActor
   @ViewBuilder
   fileprivate var rootView: some View {
     switch self {
