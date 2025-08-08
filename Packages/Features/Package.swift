@@ -14,7 +14,7 @@ let baseDeps: [PackageDescription.Target.Dependency] = [
 
 let package = Package(
   name: "Features",
-  platforms: [.iOS(.v26), .macOS(.v26)],
+  platforms: [.iOS(.v26), .macOS(.v15)],
   products: [
     .library(name: "FeedUI", targets: ["FeedUI"]),
     .library(name: "PostUI", targets: ["PostUI"]),
