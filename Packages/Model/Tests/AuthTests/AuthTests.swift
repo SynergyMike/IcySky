@@ -3,6 +3,13 @@ import Auth
 import Testing
 import Foundation
 
+actor UpdatesCollector<T> {
+  private(set) var items: [T] = []
+  func append(_ item: T) {
+    items.append(item)
+  }
+}
+
 struct AuthTests {
 
   @Test func testLogoutClearsConfigurationAndEmitsNil() async throws {
@@ -55,12 +62,12 @@ struct AuthTests {
   
   @Test func testConfigurationUpdatesStream() async throws {
     let auth = Auth()
-    var updates: [ATProtocolConfiguration?] = []
+    let updates = UpdatesCollector<ATProtocolConfiguration?>()
     
     let task = Task {
       for await config in auth.configurationUpdates {
-        updates.append(config)
-        if updates.count >= 2 { break }
+        await updates.append(config)
+        if await updates.items.count >= 2 { break }
       }
     }
     
@@ -73,7 +80,8 @@ struct AuthTests {
     try await Task.sleep(nanoseconds: 100_000_000) // 100ms
     task.cancel()
     
-    #expect(updates.count == 2)
-    #expect(updates.allSatisfy { $0 == nil })
+    let collectedUpdates = await updates.items
+    #expect(collectedUpdates.count == 2)
+    #expect(collectedUpdates.allSatisfy { $0 == nil })
   }
 }
