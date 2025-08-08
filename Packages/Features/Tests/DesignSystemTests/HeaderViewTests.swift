@@ -3,6 +3,7 @@ import SwiftUI
 import Testing
 import ViewInspector
 
+@MainActor
 struct HeaderViewTests {
   @Test func testHeaderViewTitle() throws {
     let title = "TestTitle"
